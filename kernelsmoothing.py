@@ -8,7 +8,7 @@ from scipy import stats, signal
 
 def uniform(x):
     """Uniform(square) kernel."""
-    z = np.ones(len(x),np.float)
+    z = np.ones(len(x),float)
     z[np.abs(x) >= 1] = 0
     return z         
     

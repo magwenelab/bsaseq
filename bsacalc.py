@@ -13,7 +13,7 @@ kernel_dict = {'uniform':uniform, 'triangle':triangle, 'tricube':tricube,
 
 
 def read_alleles(fname):
-    reader = csv.reader(open(fname,'rU'), delimiter="\t")
+    reader = csv.reader(open(fname,'r'), delimiter="\t")
     lines = [row for row in reader]
     cset = set(((i[0],i[1]) for i in lines))  # in python 2.7 could use set comprehensions
     return lines, cset
@@ -46,7 +46,7 @@ def load_allele_cts(fname):
     3. observed count of allele A -- integer
     4. observed count of allele a -- integer
     """
-    reader = csv.reader(open(fname,'rU'), delimiter="\t")
+    reader = csv.reader(open(fname,'r'), delimiter="\t")
     
     chroms = []
     alleles = []
@@ -90,8 +90,8 @@ def coverage(cts):
 def abs_diff_allelefreq(low, high):
     """ Calculate the absolute value of the difference in allele frequencies between two samples.
     """
-    reflow = low[:,2].astype(np.float)/np.sum(low[:,2:], axis=1)
-    refhigh = high[:,2].astype(np.float)/np.sum(high[:,2:], axis=1)
+    reflow = low[:,2].astype(float)/np.sum(low[:,2:], axis=1)
+    refhigh = high[:,2].astype(float)/np.sum(high[:,2:], axis=1)
     return np.abs(reflow - refhigh)
 
 def cts2freqs(cts):
@@ -101,7 +101,7 @@ def cts2freqs(cts):
     """
     freqs = []
     for chrom in cts:
-        freq = chrom[:,2].astype(np.float)/np.sum(chrom[:,2:], axis=1)
+        freq = chrom[:,2].astype(float)/np.sum(chrom[:,2:], axis=1)
         freqs.append(freq)
     return freqs
 
@@ -177,10 +177,10 @@ def Gtest_indep(a, b, c, d, const=1):
     
     see Sokal and Rohlf 1994, eqn 17.11 and Box 17.6 p. 731
     """
-    a = np.array(a,dtype=np.float) + const
-    b = np.array(b,dtype=np.float) + const
-    c = np.array(c,dtype=np.float) + const
-    d = np.array(d,dtype=np.float) + const
+    a = np.array(a,dtype=float) + const
+    b = np.array(b,dtype=float) + const
+    c = np.array(c,dtype=float) + const
+    d = np.array(d,dtype=float) + const
     log = np.log
     n = a + b + c + d
     q1 = a*log(a) + b*log(b) + c*log(c) + d*log(d) + n*log(n)
@@ -199,8 +199,8 @@ def Gtest_indep(a, b, c, d, const=1):
 def Gtest_onepool(a, b, pi=0.5, const=1):
     """Calculates G-statistic based on observed counts a and b, relative to expected proportion pi.
     """
-    a = np.array(a, dtype=np.float) + const
-    b = np.array(b, dtype=np.float) + const
+    a = np.array(a, dtype=float) + const
+    b = np.array(b, dtype=float) + const
     n = a + b
     expected_a = n * pi
     expected_b = n * (1.0-pi)

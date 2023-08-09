@@ -128,7 +128,7 @@ def fillbetween_chrom(x, y1, y2=0, maxgap=10000, color='r', **kw):
     """
     newx,newy1 = connected_intervals(x, y1, maxgap)
     newy2 = [0] * len(newx)
-    if y2 is not 0:
+    if y2 != 0:
         newx, newy2 = connected_intervals(x, y2, maxgap)
     for j in range(len(newx)):
         nx = newx[j]
@@ -157,7 +157,7 @@ def plot_many_chroms(X, Y, chromlens, maxgap=10000, color='r', **kw):
     for i in range(nchroms):
         x = X[i] + offset[i]
         y = Y[i]
-        plot_chrom(x, y, maxgap, color=clrs.next(), **kw)
+        plot_chrom(x, y, maxgap, color=next(clrs), **kw)
 
 def fillbetween_many_chroms(X, Y,  chromlens, maxgap=10000, color='r', **kw):
     offset = [sum(chromlens[:i]) for i in range(len(chromlens))]
@@ -166,7 +166,7 @@ def fillbetween_many_chroms(X, Y,  chromlens, maxgap=10000, color='r', **kw):
     for i in range(nchroms):
         x = X[i] + offset[i]
         y = Y[i]
-        fillbetween_chrom(x, y, y2=0, maxgap=maxgap, color=clrs.next(), **kw)    
+        fillbetween_chrom(x, y, y2=0, maxgap=maxgap, color=next(clrs), **kw)    
 
 
 def plot_raw(x,y,color='k',size=1, marker='.', ax=None, **kw):
@@ -187,7 +187,7 @@ def plot_many_raw(X, Y, chromlens, color='k', size=1, marker='.', **kw):
     for i in range(nchroms):
         x = X[i] + offset[i]
         y = Y[i]
-        plot_raw(x, y, color=clrs.next(), size=size, marker=marker, **kw)    
+        plot_raw(x, y, color=next(clrs), size=size, marker=marker, **kw)    
 
 
 def draw_region(start, end,  height, **kwargs):
