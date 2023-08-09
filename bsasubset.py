@@ -26,7 +26,7 @@ if __name__ == "__main__":
 
     fname0 = infiles[0]
     ccset = set()
-    with open(fname0, 'rU') as f:
+    with open(fname0, 'r') as f:
         for line in f:
             words = line.split()
             ccset.add( (words[0], words[1]) )
@@ -34,14 +34,14 @@ if __name__ == "__main__":
 
     for fname in infiles[1:]:
         cc = set()
-        with open(fname, 'rU') as f:
+        with open(fname, 'r') as f:
             for line in f:
                 words = line.split()
                 cc.add( (words[0], words[1]) )
             ccset &= cc
 
     for fname in infiles:
-        with open(fname, 'rU') as f:
+        with open(fname, 'r') as f:
             lines = []
             for line in f:
                 words = line.split()
