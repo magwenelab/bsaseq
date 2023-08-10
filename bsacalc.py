@@ -6,8 +6,8 @@ import csv
 
 import numpy as np
 
-import kernelsmoothing as ks
-from kernelsmoothing import  uniform, triangle, tricube, triweight, quartic, connected_maxminfilter
+from bsaseq.kernelsmoothing import  uniform, triangle, tricube, triweight, quartic, \
+    connected_maxminfilter, savgol_smooth, kernel_smooth
 kernel_dict = {'uniform':uniform, 'triangle':triangle, 'tricube':tricube, 
                 'triweight':triweight, 'quartic':quartic, 'savgol':'savgol'}
 
@@ -243,9 +243,9 @@ def Gstats(low, high, halfwidth=100, kernel=tricube, maxgap=10000, polydeg=4):
         coordsi = low[i][:,1]
         Gi = G[i]
         if kernel == "savgol":
-            smoothGi = np.array(ks.savgol_smooth(coordsi, Gi, halfwidth, maxgap=maxgap, degree=polydeg))
+            smoothGi = np.array(savgol_smooth(coordsi, Gi, halfwidth, maxgap=maxgap, degree=polydeg))
         else:
-            smoothGi = np.array(ks.kernel_smooth(coordsi, Gi, halfwidth, kernel=kernel))
+            smoothGi = np.array(kernel_smooth(coordsi, Gi, halfwidth, kernel=kernel))
         r.chroms.append(chromi)
         r.coords.append(coordsi)
         r.G.append(Gi)
@@ -264,9 +264,9 @@ def Gstats_onepool(low, pi=0.5, halfwidth=100, kernel=tricube, maxgap=10000):
         coordsi = low[i][:,1]
         Gi = G[i]
         if kernel == "savgol":
-            smoothGi = np.array(ks.savgol_smooth(coordsi, Gi, halfwidth, maxgap=maxgap))
+            smoothGi = np.array(savgol_smooth(coordsi, Gi, halfwidth, maxgap=maxgap))
         else:
-            smoothGi = np.array(ks.kernel_smooth(coordsi, Gi, halfwidth, kernel=kernel))
+            smoothGi = np.array(kernel_smooth(coordsi, Gi, halfwidth, kernel=kernel))
         r.chroms.append(chromi)
         r.coords.append(coordsi)
         r.G.append(Gi)

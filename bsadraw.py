@@ -74,7 +74,7 @@ def setup_chromfig(chromlen, ymax=None, fig=None, ax=None):
     
 def setup_many_chromfig(chromlens, ymax, chrbounds=True, 
         boundstyle='dotted', chrfontsize=8, fig=None, ax=None, labelchroms=True,
-        chromlabeloffset=0.025):
+        chromlabeloffset=0.025, shadechroms=True, shadecolor = 'gray', shadealpha=0.05):
     """Configure a matplotlib figure object for drawing multiple chromosomes end to end.
     """
     runsum = [sum(chromlens[:i]) for i in range(len(chromlens))]
@@ -91,11 +91,17 @@ def setup_many_chromfig(chromlens, ymax, chrbounds=True,
     chrlabelY = -(round(ymax * chromlabeloffset))
         
     if chrbounds:
-        ax.vlines(runsum,-2,ymax,linestyles=boundstyle,linewidth=0.25,color='0.2')    
-        for i in range(len(runsum)):
-            xpt = runsum[i]+(chromlens[i]/2.0)
-            if labelchroms:
-                ax.text(xpt, chrlabelY, str(i+1),fontsize=chrfontsize)
+        ax.vlines(runsum,-2,ymax,linestyles=boundstyle,linewidth=0.25,color='0.2')   
+
+    for i in range(len(runsum)):
+        xpt = runsum[i]+(chromlens[i]/2.0)
+        if labelchroms:
+            ax.text(xpt, chrlabelY, str(i+1),fontsize=chrfontsize)
+        if shadechroms:
+            if (i % 2) == 1:  # shade only even chroms
+                ax.axvspan(runsum[i], runsum[i] + chromlens[i],
+                           color=shadecolor, alpha=shadealpha)
+
 
     ax.set_ylim(0, ymax)
     ax.set_xlim(0, xmax)   

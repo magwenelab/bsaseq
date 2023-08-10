@@ -206,7 +206,7 @@ def connected_intervals(x, y, maxgap=10000):
     return newx, newy
  
 
-def savgol_smooth(x,y, h, maxgap=10000, degree=6, mode='mirror'):
+def savgol_smooth(x,y, h, maxgap=10000, degree=4, mode='mirror'):
     """Apply Savitsky-Golay filtering of a signal y, over the domain of x.
 
     Here the half-width h is defined in terms of the number of points in the 

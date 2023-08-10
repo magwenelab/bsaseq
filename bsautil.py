@@ -4,19 +4,22 @@ import webbrowser
 import numpy as np
 from scipy import stats
 
-import kernelsmoothing as ks
-from kernelsmoothing import  uniform, triangle, tricube, triweight, quartic
+
+
+from bsaseq.kernelsmoothing import  uniform, triangle, tricube, triweight, quartic
 kernel_dict = {'uniform':uniform, 'triangle':triangle, 'tricube':tricube,
                 'triweight':triweight, 'quartic':quartic}
 
-import bsacalc
+from . import bsacalc
 
 
 
 
 
 def haldane(x):
-    """ Haldane's function.
+    """ Haldane's mapping function. Input is distance in Morgans.
+
+    map distance (in Morgans) -> recombination prob.
     """
     z = (0.5 * (1.0 - np.exp(-2 * (np.abs(x)))))
     return z
@@ -47,7 +50,7 @@ def theoryG_exact(ns, C, v, maphalfdist, kernel=tricube):
     ns = number of segregants
     C = average coverage per variable site
     v = effective number of sites per window
-    maphalfdist = smoothing window half-width in centimorgans
+    maphalfdist = smoothing window half-width in Morgans
 
     See Magwene, Willis, Kelly 2011.
     """
@@ -72,7 +75,7 @@ def get_k(npts, kernel=tricube):
     q =  kernel(np.linspace(-1,1,npts))
     return q/np.sum(q)
 
-def get_r(maphalfdist,npts):
+def get_r(maphalfdist, npts):
     m = np.linspace(-maphalfdist,maphalfdist,npts)
     dists = np.array([np.abs(i-m) for i in m])
     return haldane(dists)
@@ -178,7 +181,7 @@ def leftMAD(x,axis=None):
 def compute_half_sample(x):
     if len(x) <= 3:
         return x
-    half = len(x)/2
+    half = len(x)//2
     n = len(x)
     s = sorted(x)
 
@@ -257,12 +260,13 @@ def robust_lognormal_mean_var(X, modefunc=half_sample_mode, madmult=5.2):
     #
     # nonoutlier = np.less_equal(logX, logMED + madmult*logMAD)
     # trimX = X[nonoutlier]
-    trimX = X[identify_outliers(logX)]
+    trimX = X[identify_outliers(logX, madmult=madmult)]
 
     mu = math.log(np.median(trimX))
     mode = modefunc(trimX)
     s2 = mu - math.log(mode)
     return mu,s2
+
 
 
 
@@ -286,6 +290,8 @@ def estimate_smoothG_cutoff_lognorm_robust(smoothG, fdr=0.05, independent=False,
         return None, None
     gcutoff = nulldist.isf(pcutoff)
     return pcutoff, gcutoff
+
+
 
 
 def simulate_bulking_negbinom(freqsLow, freqsHigh, ns, C, coords=None):
